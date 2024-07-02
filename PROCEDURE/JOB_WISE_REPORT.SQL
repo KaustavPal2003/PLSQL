@@ -1,0 +1,42 @@
+CREATE OR REPLACE PROCEDURE JOB_REPORT(A IN EMP.JOB%TYPE,T OUT NUMBER,C OUT NUMBER) IS
+
+X NUMBER;
+Y NUMBER;
+
+CURSOR S(B EMP.JOB%TYPE) IS  SELECT EMPNO,ENAME,SAL FROM EMP WHERE JOB=B;
+
+E EXCEPTION;
+
+BEGIN
+
+X:=0;
+Y:=0;
+
+DBMS_OUTPUT.PUT_LINE('EMPNO'||'         '||'ENAME'||'         '||'SAL');
+DBMS_OUTPUT.PUT_LINE('----------------------------------------');
+
+FOR I IN S(A)
+LOOP
+
+DBMS_OUTPUT.PUT_LINE(I.EMPNO||'         '||I.ENAME||'         '||I.SAL);
+DBMS_OUTPUT.PUT_LINE('----------------------------------------');
+
+X:=X+I.SAL;
+
+Y:=Y+1;
+
+END LOOP;
+
+T:=X;
+C:=Y;
+
+IF Y=0 THEN
+RAISE E;
+END IF;
+
+EXCEPTION
+WHEN E THEN
+DBMS_OUTPUT.PUT_LINE('INVALID JOB');
+
+END;
+/
